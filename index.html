@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Comercial TSMX</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div>
+        <span class="eyebrow">FERRAMENTA COMERCIAL TSMX</span>
+        <h1>Calculadora de Proposta</h1>
+        <p>Defina a complexidade e a quantidade de clientes para obter o valor comercial de importação.</p>
+      </div>
+    </header>
+
+    <main>
+      <section class="calculator-card">
+        <div class="card-title">
+          <span class="step">01</span>
+          <div>
+            <h2>Informações do projeto</h2>
+            <p>Preencha os dados abaixo.</p>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label for="complexidade">Complexidade</label>
+            <select id="complexidade">
+              <option value="muito_baixa">Nível 01 - Muito baixa</option>
+              <option value="baixa">Nível 02 - Baixa</option>
+              <option value="media">Nível 03 - Média</option>
+              <option value="alta">Nível 04 - Alta</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="clientes">Quantidade de clientes</label>
+            <input type="number" id="clientes" min="1" value="1000" placeholder="Ex.: 750">
+          </div>
+        </div>
+        
+        <div class="field" style="margin-top: 20px;">
+          <label for="descontoPersonalizado">Desconto de Negociação (%) - Sugerido 10%</label>
+          <input type="number" id="descontoPersonalizado" min="0" max="20" value="10">
+        </div>
+
+        <button type="button" class="calculate-button" onclick="calcular()">
+          Calcular valor
+        </button>
+      </section>
+
+      <section id="resultado" class="result-card hidden">
+        <div class="result-header">
+          <div>
+            <span class="eyebrow" style="color: #e8641b;">RESULTADO</span>
+            <h2>Resumo comercial</h2>
+          </div>
+          <span id="badgeComplexidade" class="badge">-</span>
+        </div>
+        <div class="result-main">
+          <div class="price-box">
+            <span>Valor base bruto sugerido</span>
+            <strong id="valorSugerido">R$ 0,00</strong>
+          </div>
+          <div class="discount-box">
+            <span>Desconto aplicado</span>
+            <strong id="descontoSugerido">0%</strong>
+          </div>
+        </div>
+        <div class="details">
+          <div class="detail">
+            <span>Clientes na Base</span>
+            <strong id="clientesResultado">-</strong>
+          </div>
+          <div class="detail">
+            <span>Faixa Aplicada</span>
+            <strong id="faixaResultado">-</strong>
+          </div>
+          <div class="detail" style="color: #e8641b;">
+            <span>Valor Final</span>
+            <strong id="valorComDesconto" style="font-size: 18px;">-</strong>
+          </div>
+        </div>
+
+        <div id="alertaNegociacao" class="negotiation-alert hidden">
+          <strong>⚠ Negociação necessária</strong>
+          <p>O valor calculado atingiu o teto comercial da complexidade. Acima desse limite, a proposta deve ser negociada com a liderança.</p>
+        </div>
+        
+        <button type="button" class="copy-button" onclick="copiarResultado()">
+          📋 Copiar Resultado para Proposta
+        </button>
+      </section>
+    </main>
+
+    <footer>
+      TSMX Tecnologia Viva · Ferramenta de uso interno comercial
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
