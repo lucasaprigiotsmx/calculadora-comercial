@@ -14,17 +14,10 @@ let resultData = {};
 function calcular() {
   const complexidade = document.getElementById("complexidade").value;
   let clientes = Number(document.getElementById("clientes").value);
-  let desconto = Number(document.getElementById("descontoPersonalizado").value) || 0;
 
   if (!clientes || clientes < 1) {
     alert("Informe uma quantidade válida de clientes.");
     return;
-  }
-  
-  if (desconto > 20) {
-      alert("Desconto máximo permitido é de 20%. Ajustando para 20%.");
-      desconto = 20;
-      document.getElementById("descontoPersonalizado").value = 20;
   }
 
   const regra = regras[complexidade];
@@ -50,24 +43,24 @@ function calcular() {
     if (valor >= regra.teto) valor = regra.teto;
   }
 
-  const valorDesconto = valor * (desconto / 100);
-  const valorFinal = valor - valorDesconto;
+  const valorMinimo = valor * 0.85; // 15% Desconto
+  const valorLideranca = valor * 0.80; // 20% Desconto
 
   resultData = {
     complexidade: regra.nome,
     clientes: clientes.toLocaleString("pt-BR"),
     valorBruto: moeda(valor),
-    desconto: desconto + "%",
-    valorFinal: moeda(valorFinal)
+    valorMinimo: moeda(valorMinimo),
+    valorLideranca: moeda(valorLideranca)
   };
 
   document.getElementById("resultado").classList.remove("hidden");
   document.getElementById("badgeComplexidade").textContent = regra.nome;
-  document.getElementById("valorSugerido").textContent = moeda(valor);
-  document.getElementById("descontoSugerido").textContent = desconto + "%";
+  document.getElementById("valorSugerido").textContent = resultData.valorBruto;
+  document.getElementById("valorMinimo").textContent = resultData.valorMinimo;
   document.getElementById("clientesResultado").textContent = resultData.clientes;
   document.getElementById("faixaResultado").textContent = faixa;
-  document.getElementById("valorComDesconto").textContent = moeda(valorFinal);
+  document.getElementById("valorLideranca").textContent = resultData.valorLideranca;
 
   const alerta = document.getElementById("alertaNegociacao");
   if (clientes > 2500 && valor >= regra.teto) alerta.classList.remove("hidden");
@@ -75,8 +68,8 @@ function calcular() {
 }
 
 function copiarResultado() {
-  if (!resultData.valorFinal) return;
-  const texto = `Proposta de Importação SGP\nNível do Sistema: ${resultData.complexidade}\nBase de Assinantes: ${resultData.clientes} clientes\n\nValor Comercial Sugerido: ${resultData.valorBruto}\nDesconto Aplicado: ${resultData.desconto}\nValor Final: ${resultData.valorFinal}`;
+  if (!resultData.valorBruto) return;
+  const texto = `Proposta de Importação SGP\nNível do Sistema: ${resultData.complexidade}\nBase de Assinantes: ${resultData.clientes} clientes\n\nValor Bruto: ${resultData.valorBruto}\nValor Mínimo (Autonomia Comercial 15%): ${resultData.valorMinimo}\nValor Mínimo (Aprovação Liderança 20%): ${resultData.valorLideranca}`;
   
   navigator.clipboard.writeText(texto).then(() => {
     alert("Resumo comercial copiado com sucesso! Você pode colar direto na proposta ou WhatsApp do cliente.");
@@ -86,8 +79,5 @@ function copiarResultado() {
 }
 
 document.getElementById("clientes").addEventListener("keydown", function(event) {
-  if (event.key === "Enter") calcular();
-});
-document.getElementById("descontoPersonalizado").addEventListener("keydown", function(event) {
   if (event.key === "Enter") calcular();
 });

@@ -42,11 +42,6 @@
           </div>
         </div>
         
-        <div class="field" style="margin-top: 20px;">
-          <label for="descontoPersonalizado">Desconto de Negociação (%) - Sugerido 10%</label>
-          <input type="number" id="descontoPersonalizado" min="0" max="20" value="10">
-        </div>
-
         <button type="button" class="calculate-button" onclick="calcular()">
           Calcular valor
         </button>
@@ -62,12 +57,12 @@
         </div>
         <div class="result-main">
           <div class="price-box">
-            <span>Valor base bruto sugerido</span>
+            <span>Valor Bruto (Sem Desconto)</span>
             <strong id="valorSugerido">R$ 0,00</strong>
           </div>
           <div class="discount-box">
-            <span>Desconto aplicado</span>
-            <strong id="descontoSugerido">0%</strong>
+            <span>Valor Mínimo (15% Desconto)</span>
+            <strong id="valorMinimo" style="color: #27ae60;">R$ 0,00</strong>
           </div>
         </div>
         <div class="details">
@@ -79,9 +74,9 @@
             <span>Faixa Aplicada</span>
             <strong id="faixaResultado">-</strong>
           </div>
-          <div class="detail" style="color: #e8641b;">
-            <span>Valor Final</span>
-            <strong id="valorComDesconto" style="font-size: 18px;">-</strong>
+          <div class="detail" style="color: #f39c12;">
+            <span>Aprovação Liderança (20%)</span>
+            <strong id="valorLideranca" style="font-size: 16px;">-</strong>
           </div>
         </div>
 
