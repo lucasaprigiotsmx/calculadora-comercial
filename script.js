@@ -73,7 +73,7 @@ function calcular() {
     else if (clientes <= 2500) { valor = 850; faixa = "2.001 a 2.500"; }
     else { 
       const excedente = clientes - 2500;
-      valor = 1000 + (excedente * 0.15);
+      valor = 850 + (excedente * 0.15);
       faixa = "Acima de 2.500 (+ R$ 0,15 un.)"; 
       if (valor >= 4000) {
         valor = 4000;
