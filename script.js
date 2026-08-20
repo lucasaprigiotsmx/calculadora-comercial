@@ -72,9 +72,13 @@ function calcular() {
     else if (clientes <= 2000) { valor = 750; faixa = "1.001 a 2.000"; }
     else if (clientes <= 2500) { valor = 850; faixa = "2.001 a 2.500"; }
     else { 
-      valor = 1000; 
-      faixa = "Acima de 2.501+ (Negociar)"; 
-      tetoAtingido = true; 
+      const excedente = clientes - 2500;
+      valor = 1000 + (excedente * 0.15);
+      faixa = "Acima de 2.500 (+ R$ 0,15 un.)"; 
+      if (valor >= 4000) {
+        valor = 4000;
+        tetoAtingido = true;
+      }
     }
   } else if (tipoServico === "unificacao") {
     nomeServico = "Unificação de Bases";
