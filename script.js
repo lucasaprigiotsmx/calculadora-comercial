@@ -43,24 +43,24 @@ function calcular() {
     if (valor >= regra.teto) valor = regra.teto;
   }
 
-  const valorMinimo = valor * 0.85; // 15% Desconto
-  const valorLideranca = valor * 0.80; // 20% Desconto
+  const valorSugeridoInicial = valor * 0.95; // 5% Desconto
+  const valorMaximoPermitido = valor * 0.85; // 15% Desconto
 
   resultData = {
     complexidade: regra.nome,
     clientes: clientes.toLocaleString("pt-BR"),
     valorBruto: moeda(valor),
-    valorMinimo: moeda(valorMinimo),
-    valorLideranca: moeda(valorLideranca)
+    valorSugeridoInicial: moeda(valorSugeridoInicial),
+    valorMaximoPermitido: moeda(valorMaximoPermitido)
   };
 
   document.getElementById("resultado").classList.remove("hidden");
   document.getElementById("badgeComplexidade").textContent = regra.nome;
   document.getElementById("valorSugerido").textContent = resultData.valorBruto;
-  document.getElementById("valorMinimo").textContent = resultData.valorMinimo;
+  document.getElementById("valorSugeridoInicial").textContent = resultData.valorSugeridoInicial;
   document.getElementById("clientesResultado").textContent = resultData.clientes;
   document.getElementById("faixaResultado").textContent = faixa;
-  document.getElementById("valorLideranca").textContent = resultData.valorLideranca;
+  document.getElementById("valorMaximoPermitido").textContent = resultData.valorMaximoPermitido;
 
   const alerta = document.getElementById("alertaNegociacao");
   if (clientes > 2500 && valor >= regra.teto) alerta.classList.remove("hidden");
@@ -69,7 +69,7 @@ function calcular() {
 
 function copiarResultado() {
   if (!resultData.valorBruto) return;
-  const texto = `Proposta de Importação SGP\nNível do Sistema: ${resultData.complexidade}\nBase de Assinantes: ${resultData.clientes} clientes\n\nValor Bruto: ${resultData.valorBruto}\nValor Mínimo (Autonomia Comercial 15%): ${resultData.valorMinimo}\nValor Mínimo (Aprovação Liderança 20%): ${resultData.valorLideranca}`;
+  const texto = `Proposta de Importação SGP\nNível do Sistema: ${resultData.complexidade}\nBase de Assinantes: ${resultData.clientes} clientes\n\nValor Bruto: ${resultData.valorBruto}\nDesconto Sugerido (5%): ${resultData.valorSugeridoInicial}\nDesconto Máximo Permitido (15%): ${resultData.valorMaximoPermitido}`;
   
   navigator.clipboard.writeText(texto).then(() => {
     alert("Resumo comercial copiado com sucesso! Você pode colar direto na proposta ou WhatsApp do cliente.");
