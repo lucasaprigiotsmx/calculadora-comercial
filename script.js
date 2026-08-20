@@ -1,8 +1,8 @@
 const regras = {
-  muito_baixa: { nome: "Nível 01 - Muito baixa", faixas: [{ max: 500, valor: 350 }, { max: 1000, valor: 450 }, { max: 2000, valor: 550 }, { max: 2500, valor: 650 }], adicional: 0.10, teto: 1500 },
-  baixa: { nome: "Nível 02 - Baixa", faixas: [{ max: 500, valor: 450 }, { max: 1000, valor: 600 }, { max: 2000, valor: 750 }, { max: 2500, valor: 850 }], adicional: 0.15, teto: 2500 },
+  muito_baixa: { nome: "Nível 01 - Muito baixa", faixas: [{ max: 500, valor: 350 }, { max: 1000, valor: 450 }, { max: 2000, valor: 550 }, { max: 2500, valor: 650 }], adicional: 0.20, teto: 1500 },
+  baixa: { nome: "Nível 02 - Baixa", faixas: [{ max: 500, valor: 450 }, { max: 1000, valor: 600 }, { max: 2000, valor: 750 }, { max: 2500, valor: 850 }], adicional: 0.20, teto: 2500 },
   media: { nome: "Nível 03 - Média", faixas: [{ max: 500, valor: 600 }, { max: 1000, valor: 800 }, { max: 2000, valor: 950 }, { max: 2500, valor: 1100 }], adicional: 0.20, teto: 4000 },
-  alta: { nome: "Nível 04 - Alta", faixas: [{ max: 500, valor: 750 }, { max: 1000, valor: 1000 }, { max: 2000, valor: 1200 }, { max: 2500, valor: 1400 }], adicional: 0.25, teto: 6000 }
+  alta: { nome: "Nível 04 - Alta", faixas: [{ max: 500, valor: 750 }, { max: 1000, valor: 1000 }, { max: 2000, valor: 1200 }, { max: 2500, valor: 1400 }], adicional: 0.20, teto: 6000 }
 };
 
 function moeda(valor) {
