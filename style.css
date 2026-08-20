@@ -33,13 +33,15 @@ body { font-family: 'Inter', -apple-system, sans-serif; background: #0A0B0E; col
 .result-header h2 { font-size: 22px; color: #fff; }
 .badge { padding: 8px 13px; background: rgba(255,255,255,0.1); border-radius: 50px; font-size: 12px; font-weight: 800; color: #fff; }
 
-.result-main { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-.price-box, .discount-box { padding: 25px; border-radius: 12px; background: #0A0B0E; border: 1px solid #363636; }
-.price-box span, .discount-box span { display: block; color: #9CA3AF; font-size: 13px; margin-bottom: 8px; }
-.price-box strong { font-size: 32px; color: #fff; }
-.discount-box strong { font-size: 32px; color: #27ae60; }
+.result-main { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
+.price-box, .discount-box, .max-discount-box { padding: 20px; border-radius: 12px; background: #0A0B0E; border: 1px solid #363636; }
+.max-discount-box { border-left: 4px solid #e74c3c; }
+.price-box span, .discount-box span, .max-discount-box span { display: block; color: #9CA3AF; font-size: 13px; margin-bottom: 8px; }
+.price-box strong { font-size: 26px; color: #fff; }
+.discount-box strong { font-size: 26px; color: #27ae60; }
+.max-discount-box strong { font-size: 26px; color: #e74c3c; }
 
-.details { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px dashed #363636; margin-top: 25px; padding-top: 25px; gap: 20px; }
+.details { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px dashed #363636; margin-top: 25px; padding-top: 25px; gap: 20px; }
 .detail span { display: block; color: #9CA3AF; font-size: 12px; margin-bottom: 6px; }
 .detail strong { font-size: 15px; color: #fff; }
 
