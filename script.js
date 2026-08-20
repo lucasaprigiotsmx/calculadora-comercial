@@ -11,8 +11,22 @@ function moeda(valor) {
 
 let resultData = {};
 
+function atualizarFormulario() {
+  const tipo = document.getElementById("tipo_servico").value;
+  const boxComplexidade = document.getElementById("box-complexidade");
+  const gridDinamico = document.getElementById("grid-dinamico");
+
+  if (tipo === "importacao") {
+    boxComplexidade.style.display = "block";
+    gridDinamico.style.gridTemplateColumns = "1fr 1fr";
+  } else {
+    boxComplexidade.style.display = "none";
+    gridDinamico.style.gridTemplateColumns = "1fr"; // Ocupa a linha toda
+  }
+}
+
 function calcular() {
-  const complexidade = document.getElementById("complexidade").value;
+  const tipoServico = document.getElementById("tipo_servico").value;
   let clientes = Number(document.getElementById("clientes").value);
 
   if (!clientes || clientes < 1) {
@@ -20,34 +34,69 @@ function calcular() {
     return;
   }
 
-  const regra = regras[complexidade];
   let valor = 0;
   let faixa = "";
+  let nomeServico = "";
+  let tetoAtingido = false;
 
-  if (clientes <= 2500) {
-    for (let i = 0; i < regra.faixas.length; i++) {
-      if (clientes <= regra.faixas[i].max) {
-        valor = regra.faixas[i].valor;
-        if (regra.faixas[i].max === 500) faixa = "1 a 500";
-        else if (regra.faixas[i].max === 1000) faixa = "501 a 1.000";
-        else if (regra.faixas[i].max === 2000) faixa = "1.001 a 2.000";
-        else faixa = "2.001 a 2.500";
-        break;
+  if (tipoServico === "importacao") {
+    const complexidade = document.getElementById("complexidade").value;
+    const regra = regras[complexidade];
+    nomeServico = "Importação (" + regra.nome + ")";
+    
+    if (clientes <= 2500) {
+      for (let i = 0; i < regra.faixas.length; i++) {
+        if (clientes <= regra.faixas[i].max) {
+          valor = regra.faixas[i].valor;
+          if (regra.faixas[i].max === 500) faixa = "1 a 500";
+          else if (regra.faixas[i].max === 1000) faixa = "501 a 1.000";
+          else if (regra.faixas[i].max === 2000) faixa = "1.001 a 2.000";
+          else faixa = "2.001 a 2.500";
+          break;
+        }
+      }
+    } else {
+      const clientesExcedentes = clientes - 2500;
+      const ultimoValor = regra.faixas[regra.faixas.length - 1].valor;
+      valor = ultimoValor + (clientesExcedentes * regra.adicional);
+      faixa = "Acima de 2.500";
+      if (valor >= regra.teto) {
+        valor = regra.teto;
+        tetoAtingido = true;
       }
     }
-  } else {
-    const clientesExcedentes = clientes - 2500;
-    const ultimoValor = regra.faixas[regra.faixas.length - 1].valor;
-    valor = ultimoValor + (clientesExcedentes * regra.adicional);
-    faixa = "Acima de 2.500";
-    if (valor >= regra.teto) valor = regra.teto;
+  } else if (tipoServico === "migracao_pop") {
+    nomeServico = "Migração de POP (SGP -> SGP)";
+    if (clientes <= 500) { valor = 450; faixa = "1 a 500"; }
+    else if (clientes <= 1000) { valor = 600; faixa = "501 a 1.000"; }
+    else if (clientes <= 2000) { valor = 750; faixa = "1.001 a 2.000"; }
+    else if (clientes <= 2500) { valor = 850; faixa = "2.001 a 2.500"; }
+    else { 
+      valor = 1000; 
+      faixa = "Acima de 2.501+ (Negociar)"; 
+      tetoAtingido = true; 
+    }
+  } else if (tipoServico === "unificacao") {
+    nomeServico = "Unificação de Bases";
+    if (clientes <= 500) {
+      valor = 350;
+      faixa = "Base inicial (até 500 clientes)";
+    } else {
+      const excedente = clientes - 500;
+      valor = 350 + (excedente * 0.10);
+      faixa = `Excedente a 500 clientes (+ R$ 0,10 un.)`;
+      if (valor >= 3000) {
+        valor = 3000;
+        tetoAtingido = true;
+      }
+    }
   }
 
   const valorSugeridoInicial = valor * 0.95; // 5% Desconto
   const valorMaximoPermitido = valor * 0.85; // 15% Desconto
 
   resultData = {
-    complexidade: regra.nome,
+    nomeServico: nomeServico,
     clientes: clientes.toLocaleString("pt-BR"),
     valorBruto: moeda(valor),
     valorSugeridoInicial: moeda(valorSugeridoInicial),
@@ -55,7 +104,7 @@ function calcular() {
   };
 
   document.getElementById("resultado").classList.remove("hidden");
-  document.getElementById("badgeComplexidade").textContent = regra.nome;
+  document.getElementById("badgeComplexidade").textContent = nomeServico;
   document.getElementById("valorSugerido").textContent = resultData.valorBruto;
   document.getElementById("valorSugeridoInicial").textContent = resultData.valorSugeridoInicial;
   document.getElementById("clientesResultado").textContent = resultData.clientes;
@@ -63,13 +112,13 @@ function calcular() {
   document.getElementById("valorMaximoPermitido").textContent = resultData.valorMaximoPermitido;
 
   const alerta = document.getElementById("alertaNegociacao");
-  if (clientes > 2500 && valor >= regra.teto) alerta.classList.remove("hidden");
+  if (tetoAtingido) alerta.classList.remove("hidden");
   else alerta.classList.add("hidden");
 }
 
 function copiarResultado() {
   if (!resultData.valorBruto) return;
-  const texto = `Proposta de Importação SGP\nNível do Sistema: ${resultData.complexidade}\nBase de Assinantes: ${resultData.clientes} clientes\n\nValor Bruto: ${resultData.valorBruto}\nDesconto Sugerido (5%): ${resultData.valorSugeridoInicial}\nDesconto Máximo Permitido (15%): ${resultData.valorMaximoPermitido}`;
+  const texto = `Proposta de Serviços TSMX\nModalidade: ${resultData.nomeServico}\nBase de Assinantes: ${resultData.clientes} clientes\n\nValor Bruto: ${resultData.valorBruto}\nDesconto Sugerido (5%): ${resultData.valorSugeridoInicial}\nDesconto Máximo Permitido (15%): ${resultData.valorMaximoPermitido}`;
   
   navigator.clipboard.writeText(texto).then(() => {
     alert("Resumo comercial copiado com sucesso! Você pode colar direto na proposta ou WhatsApp do cliente.");

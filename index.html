@@ -13,7 +13,7 @@
       <div>
         <span class="eyebrow">FERRAMENTA COMERCIAL TSMX</span>
         <h1>Calculadora de Proposta</h1>
-        <p>Defina a complexidade e a quantidade de clientes para obter o valor comercial de importação.</p>
+        <p>Selecione o serviço e a quantidade de clientes para obter o valor comercial sugerido e as margens de desconto.</p>
       </div>
     </header>
 
@@ -26,9 +26,19 @@
             <p>Preencha os dados abaixo.</p>
           </div>
         </div>
-        <div class="form-grid">
-          <div class="field">
-            <label for="complexidade">Complexidade</label>
+        
+        <div class="field" style="margin-bottom: 20px;">
+          <label for="tipo_servico">Modalidade de Serviço</label>
+          <select id="tipo_servico" onchange="atualizarFormulario()">
+            <option value="importacao">Importação de Dados (Sistema Terceiro -> SGP)</option>
+            <option value="migracao_pop">Migração de POP (SGP -> SGP)</option>
+            <option value="unificacao">Unificação de Bases (SGP + SGP)</option>
+          </select>
+        </div>
+
+        <div class="form-grid" id="grid-dinamico">
+          <div class="field" id="box-complexidade">
+            <label for="complexidade">Complexidade do Sistema</label>
             <select id="complexidade">
               <option value="muito_baixa">Nível 01 - Muito baixa</option>
               <option value="baixa">Nível 02 - Baixa</option>
@@ -37,11 +47,11 @@
             </select>
           </div>
           <div class="field">
-            <label for="clientes">Quantidade de clientes</label>
+            <label for="clientes">Quantidade de clientes (Ativos)</label>
             <input type="number" id="clientes" min="1" value="1000" placeholder="Ex.: 750">
           </div>
         </div>
-        
+
         <button type="button" class="calculate-button" onclick="calcular()">
           Calcular valor
         </button>
@@ -81,8 +91,8 @@
         </div>
 
         <div id="alertaNegociacao" class="negotiation-alert hidden">
-          <strong>⚠ Negociação necessária</strong>
-          <p>O valor calculado atingiu o teto comercial da complexidade. Acima desse limite, a proposta deve ser negociada com a liderança.</p>
+          <strong>⚠ Negociação necessária / Teto Máximo</strong>
+          <p>O valor calculado atingiu o teto comercial da modalidade (ou caiu na regra de negociação da liderança). Acima desse limite, o serviço deve ser alinhado com o gestor.</p>
         </div>
         
         <button type="button" class="copy-button" onclick="copiarResultado()">
