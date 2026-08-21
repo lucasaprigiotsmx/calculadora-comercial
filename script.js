@@ -1,8 +1,10 @@
 const regras = {
-  muito_baixa: { nome: "Nível 01 - Muito baixa", faixas: [{ max: 500, valor: 350 }, { max: 1000, valor: 450 }, { max: 2000, valor: 550 }, { max: 2500, valor: 650 }], adicional: 0.20, teto: 1500 },
-  baixa: { nome: "Nível 02 - Baixa", faixas: [{ max: 500, valor: 450 }, { max: 1000, valor: 600 }, { max: 2000, valor: 750 }, { max: 2500, valor: 850 }], adicional: 0.20, teto: 2500 },
-  media: { nome: "Nível 03 - Média", faixas: [{ max: 500, valor: 600 }, { max: 1000, valor: 800 }, { max: 2000, valor: 950 }, { max: 2500, valor: 1100 }], adicional: 0.20, teto: 4000 },
-  alta: { nome: "Nível 04 - Alta", faixas: [{ max: 500, valor: 750 }, { max: 1000, valor: 1000 }, { max: 2000, valor: 1200 }, { max: 2500, valor: 1400 }], adicional: 0.20, teto: 6000 }
+  nivel_01: { nome: "Nível 01 - Muito baixa", faixas: [{ max: 500, valor: 450 }, { max: 1000, valor: 700 }, { max: 2000, valor: 1000 }, { max: 3000, valor: 1200 }], adicional: 0.20 },
+  nivel_02: { nome: "Nível 02 - Baixa", faixas: [{ max: 500, valor: 550 }, { max: 1000, valor: 900 }, { max: 2000, valor: 1400 }, { max: 3000, valor: 1800 }], adicional: 0.20 },
+  nivel_03: { nome: "Nível 03 - Média", faixas: [{ max: 500, valor: 650 }, { max: 1000, valor: 1100 }, { max: 2000, valor: 1800 }, { max: 3000, valor: 2100 }], adicional: 0.20 },
+  nivel_04: { nome: "Nível 04 - Média alta", faixas: [{ max: 500, valor: 800 }, { max: 1000, valor: 1400 }, { max: 2000, valor: 2400 }, { max: 3000, valor: 3000 }], adicional: 0.20 },
+  nivel_05: { nome: "Nível 05 - Alta", faixas: [{ max: 500, valor: 900 }, { max: 1000, valor: 1600 }, { max: 2000, valor: 2800 }, { max: 3000, valor: 3600 }], adicional: 0.20 },
+  nivel_06: { nome: "Nível 06 - Muito alta", faixas: [{ max: 500, valor: 1000 }, { max: 1000, valor: 1800 }, { max: 2000, valor: 3200 }, { max: 3000, valor: 4200 }], adicional: 0.20 }
 };
 
 function moeda(valor) {
@@ -44,41 +46,31 @@ function calcular() {
     const regra = regras[complexidade];
     nomeServico = "Importação (" + regra.nome + ")";
     
-    if (clientes <= 2500) {
+    if (clientes <= 3000) {
       for (let i = 0; i < regra.faixas.length; i++) {
         if (clientes <= regra.faixas[i].max) {
           valor = regra.faixas[i].valor;
           if (regra.faixas[i].max === 500) faixa = "1 a 500";
           else if (regra.faixas[i].max === 1000) faixa = "501 a 1.000";
           else if (regra.faixas[i].max === 2000) faixa = "1.001 a 2.000";
-          else faixa = "2.001 a 2.500";
+          else faixa = "2.001 a 3.000";
           break;
         }
       }
     } else {
-      const clientesExcedentes = clientes - 2500;
       const ultimoValor = regra.faixas[regra.faixas.length - 1].valor;
-      valor = ultimoValor + (clientesExcedentes * regra.adicional);
-      faixa = "Acima de 2.500";
-      if (valor >= regra.teto) {
-        valor = regra.teto;
-        tetoAtingido = true;
-      }
+      valor = ultimoValor + (clientes * regra.adicional);
+      faixa = "Acima de 3.000 (+ R$ 0,20 por cliente - Sobre Total)";
     }
   } else if (tipoServico === "migracao_pop") {
     nomeServico = "Migração de POP (SGP -> SGP)";
     if (clientes <= 500) { valor = 450; faixa = "1 a 500"; }
-    else if (clientes <= 1000) { valor = 600; faixa = "501 a 1.000"; }
-    else if (clientes <= 2000) { valor = 750; faixa = "1.001 a 2.000"; }
-    else if (clientes <= 2500) { valor = 850; faixa = "2.001 a 2.500"; }
+    else if (clientes <= 1000) { valor = 700; faixa = "501 a 1.000"; }
+    else if (clientes <= 2000) { valor = 1000; faixa = "1.001 a 2.000"; }
+    else if (clientes <= 2500) { valor = 1200; faixa = "2.001 a 2.500"; }
     else { 
-      const excedente = clientes - 2500;
-      valor = 850 + (excedente * 0.15);
-      faixa = "Acima de 2.500 (+ R$ 0,15 un.)"; 
-      if (valor >= 4000) {
-        valor = 4000;
-        tetoAtingido = true;
-      }
+      valor = 1200 + (clientes * 0.20);
+      faixa = "Acima de 2.500 (+ R$ 0,20 por cliente - Sobre Total)"; 
     }
   } else if (tipoServico === "unificacao") {
     nomeServico = "Unificação de Bases";
@@ -87,10 +79,10 @@ function calcular() {
       faixa = "Base inicial (até 500 clientes)";
     } else {
       const excedente = clientes - 500;
-      valor = 350 + (excedente * 0.10);
-      faixa = `Excedente a 500 clientes (+ R$ 0,10 un.)`;
-      if (valor >= 3000) {
-        valor = 3000;
+      valor = 350 + (excedente * 0.20);
+      faixa = `Excedente a 500 clientes (+ R$ 0,20 un.)`;
+      if (valor >= 4500) {
+        valor = 4500;
         tetoAtingido = true;
       }
     }
